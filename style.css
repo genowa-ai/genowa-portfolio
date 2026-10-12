@@ -1,0 +1,456 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Guard against horizontal overflow on small viewports */
+html, body {
+    overflow-x: hidden;
+}
+
+body {
+    background-color: #0B0F19; /* Deep tech dark blue */
+    color: #E2E8F0;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+}
+
+/* Full-page background image (fully opaque, no translucency).
+   RGB channels are bit-identical to the source JPEG - no color grading. */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    background-image: url("assets/img/Genowa AI new design.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    pointer-events: none;
+}
+
+/* Typography */
+h1 { font-size: clamp(2rem, 6vw, 3rem); color: #D3D6D8; /* texture's top-third avg RGB(211,214,216) - light tone that integrates with the hero's textured backdrop */ margin-bottom: 0.5rem; text-wrap: balance; }
+h2 { font-size: clamp(1.1rem, 2.5vw, 1.5rem); color: #00E5FF; font-weight: 400; margin-bottom: 1.5rem; text-wrap: balance; }
+h3 { font-size: clamp(1.5rem, 4vw, 2rem); text-align: center; margin-bottom: 3rem; color: #00E5FF; /* teal matching the Contact Engineering Team button (#00E5FF); the dark halo keeps this light teal legible where the heading sits directly on the light texture */ text-wrap: balance; text-shadow: 0 1px 2px rgba(11, 15, 25, 0.9), 0 0 6px rgba(11, 15, 25, 0.75); }
+p { color: #94A3B8; }
+
+/* Hero Section */
+.hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: clamp(4rem, 12vh, 6rem) clamp(1.25rem, 4vw, 2rem) clamp(3rem, 8vh, 4rem);
+    background: radial-gradient(circle at top, rgba(17, 24, 39, 0.88), rgba(11, 15, 25, 0.94));
+}
+
+.hero-content {
+    max-width: 800px;
+}
+
+.founder-img {
+    /* Rectangle matching founder.jpg's intrinsic 768x1024 (3:4)
+       aspect, so the entire image is captured with no cropping */
+    width: 120px;
+    height: auto;
+    aspect-ratio: 768 / 1024;
+    object-fit: contain;
+    border: 3px solid #00E5FF;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+    cursor: pointer;
+}
+
+.leadership-banner {
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    border-left: 4px solid #00E5FF;
+    background: rgba(255, 255, 255, 0.03);
+    text-align: left;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: #00E5FF;
+    color: #0B0F19;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 4px;
+    transition: 0.3s ease;
+}
+
+.cta-button:hover {
+    background: #00b3cc;
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+}
+
+/* Contact CTA morph: on hover (or keyboard focus-within),
+   the primary button fades out and two brand-specific
+   contact buttons fade in, centered on the same position.
+   The primary button keeps its layout box (opacity only),
+   so the swap causes no layout shift. */
+.cta-group {
+    position: relative;
+    display: inline-block;
+}
+
+.cta-primary {
+    transition: opacity 0.3s ease, transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cta-split {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) scale(0.92);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    white-space: nowrap;
+}
+
+.cta-group:hover .cta-primary,
+.cta-group:focus-within .cta-primary {
+    opacity: 0;
+    transform: scale(0.92);
+    pointer-events: none;
+}
+
+.cta-group:hover .cta-split,
+.cta-group:focus-within .cta-split {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) scale(1);
+}
+
+/* Email button - Proton brand purple #6D4AFF */
+.cta-email {
+    background: #6D4AFF;
+    color: #FFFFFF; /* 5.2:1 on #6D4AFF */
+}
+
+.cta-email:hover,
+.cta-email:focus {
+    background: #5A3AE0;
+    color: #FFFFFF;
+    box-shadow: 0 0 15px rgba(109, 74, 255, 0.45);
+}
+
+/* WhatsApp button - WhatsApp brand green #25D366,
+   dark teal #075E54 text for readable contrast */
+.cta-whatsapp {
+    background: #25D366;
+    color: #075E54;
+}
+
+.cta-whatsapp:hover,
+.cta-whatsapp:focus {
+    background: #128C7E;
+    color: #FFFFFF;
+    box-shadow: 0 0 15px rgba(37, 211, 102, 0.45);
+}
+
+/* Touch devices (no hover): show the contact pair directly */
+@media (hover: none) {
+    .cta-primary {
+        display: none;
+    }
+
+    .cta-split {
+        position: static;
+        opacity: 1;
+        pointer-events: auto;
+        transform: none;
+    }
+}
+
+/* Logo Strip */
+.logo-strip {
+    text-align: center;
+    padding: clamp(2rem, 6vh, 3rem) clamp(1.25rem, 4vw, 2rem);
+    background: rgba(17, 24, 39, 0.85);
+    border-top: 1px solid #1E293B;
+    border-bottom: 1px solid #1E293B;
+}
+
+.logo-strip p {
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+    color: #D0F0F0; /* texture's cyan-tinted light tone RGB(208,240,240) - integrates with the strip's textured backdrop */
+}
+
+/* Logo Marquee - seamless bidirectional loop driven by script.js.
+   The track holds exactly five unique logos (no duplicates) and is
+   distributed with space-between at a balanced, cohesive spacing:
+   even gaps of at least 48px within a centered 900px column, so
+   the logos are clearly separated yet read as one grouped unit.
+   The motion reverses smoothly each time an outermost logo
+   touches the edge of the bounding rectangle - no breaks, jumps,
+   or abrupt logo reappearance. */
+.logos-marquee {
+    overflow: hidden;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.logos {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: max-content;
+    will-change: transform;
+}
+
+.logos img {
+    flex: 0 0 auto;
+    height: 48px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+/* Hide the in-flow element while its clone is zoomed (opacity
+   keeps hit-testing, so mouseleave still fires and the layout
+   does not shift). Must be element-type-agnostic: the zoom
+   targets are the logo-strip images, the hero founder image
+   (NOT inside .logos), and the case-study cards - any scoped
+   selector would leave the original visible alongside its
+   clone, producing a duplicate-image artifact. */
+.is-hidden {
+    opacity: 0;
+}
+
+/* Portfolio Grid */
+.portfolio-section {
+    padding: clamp(3rem, 8vh, 5rem) clamp(1.25rem, 4vw, 2rem);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.grid {
+    display: grid;
+    /* min() keeps a single column from overflowing narrow
+       viewports while still filling wide ones */
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+    gap: 2rem;
+}
+
+/* Case Study Cards - processed per-company backgrounds (card-*.png),
+   rendered on the .card::before layer. Each 800x600 canvas matches
+   the card's ~4:3 aspect, so cover is lossless: the logo is fully
+   visible, uncut, and centered at the reference scale set by the
+   swish container (330px = 55% of the canvas height). Other logos
+   are fitted uniquely within the same 85% x 55% safe zone. */
+.card {
+    position: relative;
+    overflow: hidden;
+    background-color: #0B0F19;
+    border: 1px solid #1E293B;
+    padding: 2.5rem;
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Background image layer - the card's ONLY image layer. It scales
+   up from the center on hover, completely replacing the original
+   frame (the original is never duplicated or left behind, so no
+   double-image artifacts appear) and smoothly returns to its
+   original state when the cursor is removed. */
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: inherit;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: 0;
+}
+
+.card:hover::before {
+    transform: scale(1.12);
+}
+
+/* Card content renders above the background image layer */
+.card > * {
+    position: relative;
+    z-index: 1;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Per-company styling. --card-accent is the dominant brand color
+   of each logo, darkened or lightened where the raw color could
+   not reach 4.5:1 against the card's solid fill. Light-fill
+   cards override the text vars. Each container's background
+   image lives on its ::before layer (see .card::before). */
+.card-learnhow {
+    border-color: #1E293B;
+    --card-accent: #00A5F0; /* brand blue RGB(0,165,240) - 5.7:1 on #00253D fill */
+}
+
+.card-learnhow::before {
+    background-image: url("assets/img/card-learnhow.png");
+}
+
+.card-swish {
+    border-color: #1E293B;
+    --card-accent: #E9B53E; /* brand gold RGB(233,181,62) - 7.8:1 on #020607 fill */
+}
+
+.card-swish::before {
+    background-image: url("assets/img/card-swish.png");
+}
+
+.card-telus {
+    border-color: #CBD5E1;
+    --card-heading: #0B0F19; /* 18.5:1 on #F7F7F7 fill */
+    --card-body: #1E293B; /* 13.7:1 */
+    --card-pill-bg: #E2E8F0;
+    --card-accent: #68408A; /* brand violet RGB(104,64,138) - 7.3:1 on #F7F7F7 fill */
+}
+
+.card-telus::before {
+    background-image: url("assets/img/card-telus.png");
+}
+
+.card-amplemarket {
+    border-color: #CBD5E1;
+    --card-heading: #0B0F19; /* 18.6:1 on #FFFFFF fill */
+    --card-body: #1E293B; /* 13.9:1 */
+    --card-pill-bg: #E2E8F0;
+    --card-accent: #0F172A; /* achromatic logo - dark slate, 17.8:1 on #FFFFFF fill */
+}
+
+.card-amplemarket::before {
+    background-image: url("assets/img/card-amplemarket.png");
+}
+
+.card-connecticut {
+    border-color: #1E293B;
+    --card-accent: #9EC93D; /* Wesleyan brand green RGB(158,201,61) - 9.4:1 on #141A0E fill */
+}
+
+.card-connecticut::before {
+    background-image: url("assets/img/card-connecticut.png");
+}
+
+/* Dynamic text colors: chosen per card from each image's measured
+   average luminance. Dark images (learnhow, swish, wesleyan) keep the
+   light scheme below (8:1+ contrast); light images (telus,
+   amplemarket) override --card-heading/--card-body with dark values. */
+.card h4 {
+    font-size: 1.3rem;
+    color: var(--card-heading, #FFFFFF);
+    margin-bottom: 1rem;
+}
+
+.card p {
+    font-size: 0.95rem;
+    color: var(--card-body, #CBD5E1);
+    margin-bottom: 1.5rem;
+}
+
+.card .client-tag {
+    color: var(--card-accent);
+}
+
+.card .tech-stack span {
+    background: var(--card-pill-bg, #1E293B);
+    color: var(--card-accent);
+}
+
+/* Legibility halo: card text crosses the centered logo graphics, and
+   no single color can contrast with both the solid fill and the
+   logo's brand elements at once (they are luminance opposites).
+   A halo of the fill color around the glyphs keeps the text legible
+   against the background image and the graphic elements alike,
+   preventing visual collision. */
+.card h4,
+.card p,
+.card .client-tag {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 0 6px rgba(0, 0, 0, 0.75);
+}
+
+.card-telus h4,
+.card-telus p,
+.card-telus .client-tag,
+.card-amplemarket h4,
+.card-amplemarket p,
+.card-amplemarket .client-tag {
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9), 0 0 6px rgba(255, 255, 255, 0.75);
+}
+
+/* Per-card hover borders (solid brand accent colors) */
+.card-learnhow:hover { border-color: #00A5F0; }
+.card-swish:hover { border-color: #E9B53E; }
+.card-telus:hover { border-color: #68408A; }
+.card-amplemarket:hover { border-color: #0F172A; }
+.card-connecticut:hover { border-color: #9EC93D; }
+
+.client-tag {
+    display: inline-block;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+/* Tech Stack Pills */
+.tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tech-stack span {
+    background: rgba(0, 229, 255, 0.1);
+    color: #00E5FF;
+    font-size: 0.75rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+/* Zoomed clone: fixed at the original's rect, then transitioned
+   by JS to the screen center at ZOOM_SCALE. This rule MUST stay
+   below the .card rules in the cascade: a cloned card keeps its
+   .card class, whose `position: relative` (equal specificity,
+   later in the file) would otherwise override the fixed
+   positioning required here and break the card zoom. */
+.logo-clone {
+    position: fixed;
+    margin: 0;
+    z-index: 1000;
+    pointer-events: none;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+}
+
+/* Small-viewport refinements */
+@media (max-width: 640px) {
+    .logos img { height: 40px; }
+    .founder-img { width: 104px; }
+    .grid { gap: 1.5rem; }
+}
